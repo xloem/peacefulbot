@@ -84,11 +84,6 @@ feelings = {
     'mad': -1,
 }
 
-def classify_feelings(phrases):
-    return classify(phrases, feelings_needs.feeling_words, 'This person is feeling {}.', multi_label = True)
-
-
-
 conversation = transformers.Conversation()
 #conversation.past_user_inputs #can be prefilled
 #conversation.generated_responses #can be prefilled
@@ -100,9 +95,10 @@ conversation = transformers.Conversation()
 #print('\nPeacefulbot is learning to discuss plans for community healing.\n\n')
 print('\nPeacefulbot likely has time for you if you would like to interrupt.\n\n')
 print('What do you say?\n\n')
-while True:
+#while True:
+for count in range(1):
     conversation.add_user_input(input('  '))
-    options_converse(converse, conversation, num_return_sequences=8, num_beams=8, num_beam_groups=8, diversity_penalty=0.5))
+    options_converse(converse, conversation, num_return_sequences=8, num_beams=8, num_beam_groups=8, diversity_penalty=0.5)
     print(conversation.generated_responses[-1])
 
 # generation options:

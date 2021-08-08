@@ -138,4 +138,22 @@ for feeling_name, feeling_words in feeling_words_by_category.items():
     for feeling_word in feeling_words:
         feeling_category_by_word[feeling_word] = feeling_name
 
+feeling_categories = [*feeling_words_by_category.keys()]
 feeling_words = [*feeling_category_by_word.keys()]
+
+def classify_feelings(pipeline, phrases, multi_label = False):
+    results = pipeline(phrases, feeling_words, 'This person is feeling {}.', multi_label = multi_label)
+    for idx, result in enumerate(results):
+        scores = {label: [0.0, None, 0.0] for label in feeling_categories}
+        for label, score in zip(result['labels'], result['scores']):
+            score_obj = scores[feeling_category_by_word[label]]
+            score_obj[0] += score
+            if score_obj[2] < score:
+                score_obj[1] = label
+                score_obj[2] = score
+        result = [(label, *score) for label, score in scores.items()]
+        result.sort(key = lambda pair: pair[1], reverse = True)
+        results[idx] = result
+    return results
+
+
